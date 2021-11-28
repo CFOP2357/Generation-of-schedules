@@ -17,21 +17,14 @@ def lee_csv(path):
 def BD_connector():
     return mysql.connector.connect(host="localhost", user="root", password="1234",database="horarios")
 
-def Consulta_Tabla(tablename):
-    cnn = BD_connector() #crear conexion con la BD
-    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("SELECT * FROM "+ tablename) #consulta en  SQL
-    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
-    cur.close() #cerrar cursor
-    cnn.close() #cerrar conexion 
-    return datos #regresar los datos consultados
+
 
 def Imprime_datos(datos):
     for fila in datos: #itera en cada fila de los datos leidos en la BD y los va imprimiendo
         print(fila)
 
 
-def Crea_csv_horario(datos):
+def Crea_csv_horario(): #este metodo tiene que recibir el objeto que tenga los datos 
     archivo = "horariosUaslp.csv"
     csv = open(archivo,"w")
     csv.write("cve_alumno,cve_materia,grupo\n")
@@ -48,3 +41,55 @@ def Crea_csv_horario(datos):
     for indice, fila in df.iterrows():
        hor= fila['cve_alumno'] + "," + fila['cve_materias'] + "," + fila['grupo'] + "\n"
        csv.write(hor)
+
+def Leeinserta(path,tablename,engine):
+    df = lee_csv(path)
+    inserta_BD(df,tablename,engine)
+
+#Consultas para menejo de datos SQL
+#  
+def Consulta_Tabla(tablename):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT * FROM "+ tablename) # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+def MateriasdeCarreraSegunAlumno(cveunica):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute( "SELECT m.id_materia, m.id_carrera, m.Nombre FROM materia_carrera as m WHERE m.id_carrera = ( select a.id_carrera from alumnos as a where a.cve_unica =" + str(cveunica) + ")" ) # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+
+def ObtieneGrupos(idmateria):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT * FROM horarios.materias as m  WHERE m.id_materia = " + str(idmateria) + "and cupo <> 0") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+def DecrementaCupo(idmateria,grupo):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("UPDATE horarios.materias as m SET m.cupo = 0 where m.id_materia = "+ str(idmateria) +" and m.grupo = "+ str(grupo)) # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+
+#grups = ObtieneGrupos(4500)
+#for item in grups: 
+#    print(item[0])
+
+
+#for i in range(0,10,2):
+#    print(i)
