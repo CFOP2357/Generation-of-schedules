@@ -3,7 +3,7 @@ import Lectura
 
 #instalar las librerias de pandas y de sqlalchemy "pi pandas y pi sqlalchemy"
 
-
+#Este comentario es para ver los cambios en mi rama
 
 engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion 
 
