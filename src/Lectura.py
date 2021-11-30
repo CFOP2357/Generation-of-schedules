@@ -1,7 +1,8 @@
 import pandas as pd
 from sqlalchemy import create_engine
 import mysql.connector
-
+import ClaseHorario as cl
+import Lectura
 def inserta_BD(df,nt,cn):
     df.to_sql(name = nt , con = cn, if_exists = 'replace', index = False)
 
@@ -70,7 +71,7 @@ def MateriasdeCarreraSegunAlumno(cveunica):
 def ObtieneGrupos(idmateria):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("SELECT * FROM horarios.materias as m  WHERE m.id_materia = " + str(idmateria) + "and cupo <> 0") # consulta en  SQL
+    cur.execute("SELECT * FROM materias as m  WHERE m.id_materia = " + str(idmateria) + " and cupo != 0") # consulta en  SQL
     datos = cur.fetchall() # obtener en un objeto los datos de la tabla
     cur.close() #cerrar cursor
     cnn.close() #cerrar conexion 
@@ -79,11 +80,12 @@ def ObtieneGrupos(idmateria):
 def DecrementaCupo(idmateria,grupo):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("UPDATE horarios.materias as m SET m.cupo = 0 where m.id_materia = "+ str(idmateria) +" and m.grupo = "+ str(grupo)) # consulta en  SQL
-    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    consql = "UPDATE horarios.materias as m SET m.cupo = m.cupo - 1 where m.id_materia = "+ str(idmateria) +" and m.grupo = "+ str(grupo)
+    #print(consql)
+    cur.execute(consql) # consulta en  SQL
+    cnn.commit() #cerrar conexion 
     cur.close() #cerrar cursor
-    cnn.close() #cerrar conexion 
-    return datos #regresar los datos consultados
+    
 
 def InsertaMateria(cveunica, idmateria, grupo):
     cnn = BD_connector() #crear conexion con la BD
@@ -92,9 +94,36 @@ def InsertaMateria(cveunica, idmateria, grupo):
     cnn.commit() #cerrar conexion 
     cur.close() #cerrar cursor
     
-
+def BorrarHorarios():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("trucate table horarios") # consulta en  SQL
+    cnn.commit() #cerrar conexion 
+    cur.close() #cerrar cursor
 
 ##-------Pruebas en comentarios Ignorar---------
+
+#DecrementaCupo(0,1)
+#Alumno = cl.Horario(275507)
+
+#grupos = Lectura.ObtieneGrupos(0) 
+#columnas       0       1       2         3       4       5       6       7         8       9       10
+#metadaro   idmateria  grupo   maestro  cupo    lun_i   lun_fin  mart_i  mart_fin  .......
+#for item in grupos:
+    #verificar el grupo no se empalma con el horario que ya se tiene
+#    dia=0
+
+    #Si la bandera se queda en 0 entonces significa que ya existe una clase en la hora de el grupo que se quiere meter si no
+    #el algoritmo setea la clase con un 1 en las horas 
+        #escribir en una tabla de BD el horario o guardar clave alumno, clave materia , grupo
+    #dia=0
+    #for i in range(0,10,2):
+    #    if(item[i+4] != 0):
+    #        Alumno.SetHora(item[i+4],item[i+5],dia)
+    #    dia = dia + 1
+    #break
+
+#Alumno.ImprimeMatriz()
 
 #InsertaMateria(2542,4588,1)
 

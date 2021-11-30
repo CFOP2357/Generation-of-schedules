@@ -20,7 +20,7 @@ Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/carreras.csv","
 Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materia_carrera.csv","materia_carrera",engine)
 Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materias.csv","materias",engine)
 
-
+Lectura.BorrarHorarios()
 
 #Algoritmo iterativo 
 
@@ -52,11 +52,12 @@ def AlgoritmoIterativoV1():
             for item in grupos:
                 #verificar el grupo no se empalma con el horario que ya se tiene
                 dia=0
-                bandera = 0
+                bandera = 1
                 for i in range(0,10,2):
-                    if(Alumno.VerificaOcupado(item[i+4],item[i+5],dia) == 1):
-                       bandera=1
-                       break
+                    if(item[i+4] != 0):
+                        if(Alumno.VerificaOcupado(item[i+4],item[i+5],dia) == 0):
+                            bandera=0
+                            break
                     dia = dia + 1
 
                 #Si la bandera se queda en 0 entonces significa que ya existe una clase en la hora de el grupo que se quiere meter si no
@@ -68,21 +69,14 @@ def AlgoritmoIterativoV1():
                         if(item[i+4] != 0):
                             Alumno.SetHora(item[i+4],item[i+5],dia)
                         dia = dia + 1
-                #Dentro de este if tendria que guardar en la base de datos al alumno con la materia y grupo que se acaba de crear 
-                Lectura.InsertaMateria(cveunica,idmat,item[1])
-                #Decrementar en uno el cupo de la materia
-                Lectura.DecrementaCupo(item[0],item[1])
-                break
+                    #Dentro de este if tendria que guardar en la base de datos al alumno con la materia y grupo que se acaba de crear 
+                    Lectura.InsertaMateria(cveunica,idmat,item[1])
+                    #Decrementar en uno el cupo de la materia
+                    Lectura.DecrementaCupo(item[0],item[1])
+                    break
                 
     PilaAlumnos.append(Alumno) #Se asigna el alumno a la pila 
 
-
-                
-
-                    
-    
-
-  
 
 
     

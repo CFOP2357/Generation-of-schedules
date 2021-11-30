@@ -11,13 +11,13 @@ class Horario:
     
 
     def SetHora(self, HoraInicio, HoraFinal, Dia):
-        self.matrizHor[HoraInicio-7,Dia]
+        self.matrizHor[HoraInicio-7,Dia] = 1
         if(HoraFinal>HoraInicio+1):
             if(HoraFinal==HoraInicio+2):
-                self.matrizHor[HoraFinal - (7 + 1),Dia]
+                self.matrizHor[HoraFinal - (7 + 1),Dia] = 1
             elif(HoraFinal==HoraInicio+3):
-                self.matrizHor[HoraFinal - (7 + 1),Dia]
-                self.matrizHor[HoraFinal - (7 + 2),Dia]
+                self.matrizHor[HoraFinal - (7 + 1),Dia] = 1
+                self.matrizHor[HoraFinal - (7 + 2),Dia] = 1
 
 
     def VerificaOcupado(self, HoraInicio,HoraFinal,Dia):
