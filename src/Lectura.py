@@ -79,7 +79,7 @@ def ObtieneGrupos(idmateria):
 def ObtieneGruposEquitativo(idmateria):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("SELECT * FROM materias as m  WHERE m.id_materia = " + str(idmateria) + " and cupo != 0") # consulta en  SQL
+    cur.execute("SELECT * FROM horarios.materias as m  WHERE m.id_materia = " + str(idmateria) + " and cupo != 0 order by m.cupo desc") # consulta en  SQL
     datos = cur.fetchall() # obtener en un objeto los datos de la tabla
     cur.close() #cerrar cursor
     cnn.close() #cerrar conexion 
@@ -106,7 +106,7 @@ def InsertaMateria(cveunica, idmateria, grupo):
 def BorrarHorarios():
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("trucate table horarios") # consulta en  SQL
+    cur.execute("truncate table horarios") # consulta en  SQL
     cnn.commit() #cerrar conexion 
     cur.close() #cerrar cursor
 
