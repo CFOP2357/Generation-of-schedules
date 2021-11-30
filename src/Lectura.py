@@ -85,6 +85,18 @@ def DecrementaCupo(idmateria,grupo):
     cnn.close() #cerrar conexion 
     return datos #regresar los datos consultados
 
+def InsertaMateria(cveunica, idmateria, grupo):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("insert into horarios.horarios(cve_unica, id_materia, grupo) values('"+ str(cveunica)+ "', '"+str(idmateria)+"', '"+str(grupo)+"')") # consulta en  SQL
+    cnn.commit() #cerrar conexion 
+    cur.close() #cerrar cursor
+    
+
+
+##-------Pruebas en comentarios Ignorar---------
+
+#InsertaMateria(2542,4588,1)
 
 #grups = ObtieneGrupos(4500)
 #for item in grups: 
