@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from PIL import ImageTk,Image
 
 def ask_filename_csv(root: Tk):
 	root.filename = filedialog.askopenfilename(title="Selecciona un archivo", 
@@ -7,21 +8,29 @@ def ask_filename_csv(root: Tk):
 
 class UI(object):
 	"""docstring for UI"""
+
 	def __init__(self, generate_function) -> None:
 		self.root = Tk()
-		self.root.title("Generación de horarios")
+		self.root.title("Generación de Horarios")
+		self.root.resizable(False,False)
+		self.root.iconbitmap('icono.ico')
+		self.root.config(bg="#E9E9F1")
+		self.headerImg = ImageTk.PhotoImage(Image.open("UASLP.PNG"))
+		self.headerLabel = Label(self.root, image=self.headerImg)
 
-		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de estudiantes", 
-											  command=self.update_estudiantes_filename)
+		self.label_general = Label(self.root, text="Favor de assiganar todos los archivos para generar los horarios.",bg="#E9E9F1")
+		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
+		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
+											  command=self.update_estudiantes_filename,bg="#E9E9F1")
 		self.open_grupos_button = Button(self.root, text="Abrir CSV de Grupos", 
-										 command=self.update_grupos_filename)
+										 command=self.update_grupos_filename,bg="#E9E9F1")
 		self.open_carreras_button = Button(self.root, text="Abrir CSV de Carreras", 
-										   command=self.update_carreras_filename)
-		self.open_materias_button = Button(self.root, text="Abrir CSV de materias", 
-										   command=self.update_materias_filename)
+										   command=self.update_carreras_filename,bg="#E9E9F1")
+		self.open_materias_button = Button(self.root, text="Abrir CSV de Materias", 
+										   command=self.update_materias_filename,bg="#E9E9F1")
 
-		self.generate_schedules_button = Button(self.root, text="Generar horarios", 
-												command=generate_function)
+		self.generate_schedules_button = Button(self.root, text="Generar Horarios", 
+												command=generate_function,bg="#E9E9F1")
 
 		self.build_ui()
 
@@ -41,11 +50,13 @@ class UI(object):
 		self.materias_filename = ask_filename_csv(self.root)
 
 	def build_ui(self) -> None:
-		self.open_estudiantes_button.pack()
-		self.open_grupos_button.pack()
-		self.open_carreras_button.pack()
-		self.open_materias_button.pack()
-		self.generate_schedules_button.pack()
+		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)
+		self.label_general.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=1, column=0, sticky=W)
+		#self.label_Metrica.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=2, column=0, sticky=W)
+		self.open_estudiantes_button.grid(	padx=5,pady=4,ipadx=5,ipady=5, row=3, column=0, sticky=E+W)
+		self.open_grupos_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=4, column=0, sticky=E+W)
+		self.open_carreras_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=5, column=0, sticky=E+W)
+		self.open_materias_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=6, column=0, sticky=E+W)
+		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=7, column=2, sticky=E+W)
 
-		
 		
