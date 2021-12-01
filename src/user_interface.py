@@ -19,6 +19,7 @@ class UI(object):
 		self.headerLabel = Label(self.root, image=self.headerImg)
 
 		self.label_general = Label(self.root, text="Favor de assiganar todos los archivos para generar los horarios.",bg="#E9E9F1")
+		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
 		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
 											  command=self.update_estudiantes_filename,bg="#E9E9F1")
 		self.open_grupos_button = Button(self.root, text="Abrir CSV de Grupos", 
@@ -50,11 +51,12 @@ class UI(object):
 
 	def build_ui(self) -> None:
 		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)
-		self.label_general.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=1, column=0, columnspan=3, sticky=S+N+E+W)
-		self.open_estudiantes_button.grid(	padx=5,pady=4,ipadx=5,ipady=5, row=2, column=0, sticky=E+W)
-		self.open_grupos_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=3, column=0, sticky=E+W)
-		self.open_carreras_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=4, column=0, sticky=E+W)
-		self.open_materias_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=5, column=0, sticky=E+W)
-		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=6, column=2, sticky=E+W)
+		self.label_general.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=1, column=0, sticky=W)
+		#self.label_Metrica.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=2, column=0, sticky=W)
+		self.open_estudiantes_button.grid(	padx=5,pady=4,ipadx=5,ipady=5, row=3, column=0, sticky=E+W)
+		self.open_grupos_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=4, column=0, sticky=E+W)
+		self.open_carreras_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=5, column=0, sticky=E+W)
+		self.open_materias_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=6, column=0, sticky=E+W)
+		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=7, column=2, sticky=E+W)
 
 		
