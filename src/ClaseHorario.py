@@ -9,7 +9,7 @@ class Horario:
         #se inicializa en 0's ya que un 0 significa que no hay nada asignado y un 1 significa que ya esta ocupado ese lugar 
         self.matrizHor = np.zeros((14,6)) 
     
-
+#Metodo para mapear el horario , pone un 1 en la hora y dia que le llega como parametro
     def SetHora(self, HoraInicio, HoraFinal, Dia):
         self.matrizHor[HoraInicio-7,Dia] = 1
         if(HoraFinal>HoraInicio+1):
@@ -19,7 +19,8 @@ class Horario:
                 self.matrizHor[HoraFinal - (7 + 1),Dia] = 1
                 self.matrizHor[HoraFinal - (7 + 2),Dia] = 1
 
-
+#Con base en los parametros que llegan checa en la matriz si tiene un 1 , si es asi
+#esta ocupado.
     def VerificaOcupado(self, HoraInicio,HoraFinal,Dia):
         bandera = 1
         if(self.matrizHor[HoraInicio-7,Dia] == 1):
@@ -29,7 +30,7 @@ class Horario:
         return bandera
 
 
-
+#imprime matriz
     def ImprimeMatriz(self):
         print (self.matrizHor)
 
