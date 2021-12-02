@@ -20,7 +20,7 @@ class UI(object):
 		self.headerImg = ImageTk.PhotoImage(Image.open(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/UASLP.PNG'))
 		self.headerLabel = Label(self.root, image=self.headerImg)
 
-		self.label_general = Label(self.root, text="Favor de assiganar todos los archivos para generar los horarios.",bg="#E9E9F1")
+		self.label_general = Label(self.root, text="Favor de asignar todos los archivos para generar los horarios.",bg="#E9E9F1")
 		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
 		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
 											  command=self.update_estudiantes_filename,bg="#E9E9F1")
@@ -33,7 +33,6 @@ class UI(object):
 
 		self.generate_schedules_button = Button(self.root, text="Generar Horarios", 
 												command=generate_function,bg="#E9E9F1")
-
 		self.build_ui()
     
 	global engine 
@@ -52,11 +51,11 @@ class UI(object):
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
-		L.Leeinserta(self.carreras_filename, "materia_carrera", engine)
+		L.Leeinserta(self.carreras_filename, "carreras", engine)
 
 	def update_materias_filename(self) -> None:
 		self.materias_filename = ask_filename_csv(self.root)
-		L.Leeinserta(self.materias_filename, "alumnos", engine)
+		L.Leeinserta(self.materias_filename, "materia_carrera", engine)
 
 	def build_ui(self) -> None:
 		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)

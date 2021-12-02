@@ -131,7 +131,7 @@ def AlgoritmoIterativoV2():
     PilaAlumnos.append(Alumno) #Se asigna el alumno a la pila 
 
 
-AlgoritmoIterativoV2()
+#AlgoritmoIterativoV2()
 #Lectura.Imprime_datos(Lectura.Consulta_Tabla("alumnos")) # imprime los datos que se guardaron en la BD
 
 #Lectura.Crea_csv_horario(Lectura.Consulta_Tabla("alumnos"))
