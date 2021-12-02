@@ -15,10 +15,10 @@ engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion
 #Lectura.inserta_BD(df,"alumnos",engine) #para que inserte lo que leyo del csv en la BD es necesario mandar como parametro el dataFramework, nombre de la tabla y la conexion
 
 
-Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/AlumnosOculto.csv", "alumnos", engine)
-Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/carreras.csv","carreras",engine)
-Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materia_carrera.csv","materia_carrera",engine)
-Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materias.csv","materias",engine)
+#Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/AlumnosOculto.csv", "alumnos", engine)
+#Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/carreras.csv","carreras",engine)
+#Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materia_carrera.csv","materia_carrera",engine)
+#Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materias.csv","materias",engine)
 
 Lectura.BorrarHorarios()
 

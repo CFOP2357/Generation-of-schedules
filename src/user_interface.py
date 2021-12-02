@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk,Image
+import Lectura as L 
 
 def ask_filename_csv(root: Tk):
 	filename = filedialog.askopenfilename(title="Selecciona un archivo", 
@@ -9,14 +10,14 @@ def ask_filename_csv(root: Tk):
 
 class UI(object):
 	"""docstring for UI"""
-
 	def __init__(self, generate_function) -> None:
+		
 		self.root = Tk()
 		self.root.title("Generación de Horarios")
 		self.root.resizable(False,False)
-		self.root.iconbitmap('icono.ico')
+		self.root.iconbitmap(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/icono.ico')
 		self.root.config(bg="#E9E9F1")
-		self.headerImg = ImageTk.PhotoImage(Image.open("UASLP.PNG"))
+		self.headerImg = ImageTk.PhotoImage(Image.open(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/UASLP.PNG'))
 		self.headerLabel = Label(self.root, image=self.headerImg)
 
 		self.label_general = Label(self.root, text="Favor de assiganar todos los archivos para generar los horarios.",bg="#E9E9F1")
@@ -34,21 +35,28 @@ class UI(object):
 												command=generate_function,bg="#E9E9F1")
 
 		self.build_ui()
+    
+	global engine 
+	engine  = L.conexion_BD() #guarda la conexion en un objeto de conexion
 
 	def run(self) -> None:
 		self.root.mainloop()
 
 	def update_estudiantes_filename(self) -> None:
 		self.estudiantes_filename = ask_filename_csv(self.root)
+		L.Leeinserta(self.estudiantes_filename, "alumnos", engine)
 
 	def update_grupos_filename(self) -> None:
 		self.grupos_filename = ask_filename_csv(self.root)
+		L.Leeinserta(self.grupos_filename, "materias", engine)
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
+		L.Leeinserta(self.carreras_filename, "materia_carrera", engine)
 
 	def update_materias_filename(self) -> None:
 		self.materias_filename = ask_filename_csv(self.root)
+		L.Leeinserta(self.materias_filename, "alumnos", engine)
 
 	def build_ui(self) -> None:
 		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)
