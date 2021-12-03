@@ -44,7 +44,37 @@ def Crea_csv_horario(): #este metodo tiene que recibir el objeto que tenga los d
 
 def Leeinserta(path,tablename,engine):
     df = lee_csv(path)
-    inserta_BD(df,tablename,engine)
+    mensaje = 'Error'
+    shape = df.shape
+    if (tablename == 'alumnos'):
+        if(shape[1]==2 and df.columns.values[0] == 'cve_unica' and df.columns.values[1] == 'id_carrera' ):
+            mensaje = 'El archivo de los estudiantes fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener dos columnas con encabecados: cve_unica, id_carrera'
+    elif(tablename == 'materias'):
+        if(shape[1]==16 and df.columns.values[0] == 'id_materia' and df.columns.values[1] == 'grupo' and df.columns.values[2] == 'maestro' and df.columns.values[3] == 'cupo' ):
+            mensaje = 'El archivo de los grupos fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo debe tener dos columnas con encabecados: id_materia, grupo, maestro, cupo'
+            
+    elif(tablename == 'carreras'):
+        if(shape[1]==2 and df.columns.values[0] == 'id_carrera' and df.columns.values[1] == 'nombre' ):
+            mensaje = 'El archivo de las carreras fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener dos columnas con encabecados: id_carrera, nombre'
+
+    elif(tablename == 'materia_carrera'):
+        if(shape[1]==3 and df.columns.values[0] == 'id_materia' and df.columns.values[1] == 'id_carrera' and df.columns.values[2] == 'nombre' ):
+            mensaje = 'El archivo de las materias fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener dos columnas con encabecados: id_materia, id_carrera, nombre'
+
+    #inserta_BD(df,tablename,engine)
+    return mensaje
 
 #Consultas para menejo de datos SQL
 #  
