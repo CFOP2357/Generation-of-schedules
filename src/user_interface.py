@@ -17,7 +17,10 @@ class UI(object):
 		self.root.config(bg="#E9E9F1")
 		self.headerImg = ImageTk.PhotoImage(Image.open("UASLP.PNG"))
 		self.headerLabel = Label(self.root, image=self.headerImg)
-
+		self.Label1 = Label(self.root, text="")
+		self.Label2 = Label(self.root, text="")
+		self.Label3 = Label(self.root, text="")
+		self.Label4 = Label(self.root, text="")
 		self.label_general = Label(self.root, text="Favor de assiganar todos los archivos para generar los horarios.",bg="#E9E9F1")
 		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
 		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
