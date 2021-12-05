@@ -20,10 +20,10 @@ class UI(object):
 		self.headerImg = ImageTk.PhotoImage(Image.open(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/UASLP.PNG'))
 		self.headerLabel = Label(self.root, image=self.headerImg)
 
-		self.Label1 = Label(self.root, text="")
-		self.Label2 = Label(self.root, text="")
-		self.Label3 = Label(self.root, text="")
-		self.Label4 = Label(self.root, text="")
+		self.Label1 = Label(self.root, text="No cargado", bg="#E9E9F1")
+		self.Label2 = Label(self.root, text="No cargado", bg="#E9E9F1")
+		self.Label3 = Label(self.root, text="No cargado" , bg="#E9E9F1")
+		self.Label4 = Label(self.root, text="No cargado", bg="#E9E9F1")
 		self.label_general = Label(self.root, text="Favor de asignar todos los archivos para generar los horarios.",bg="#E9E9F1")
 		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
 		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
@@ -47,20 +47,19 @@ class UI(object):
 
 	def update_estudiantes_filename(self) -> None:
 		self.estudiantes_filename = ask_filename_csv(self.root)
-		self.Label1. = L.Leeinserta(self.estudiantes_filename, "alumnos", engine)
-	
-
+		self.Label1['text'] = L.Leeinserta(self.estudiantes_filename, "alumnos", engine)
+		
 	def update_grupos_filename(self) -> None:
 		self.grupos_filename = ask_filename_csv(self.root)
-		L.Leeinserta(self.grupos_filename, "materias", engine)
+		self.Label2['text'] = L.Leeinserta(self.grupos_filename, "materias", engine)
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
-		L.Leeinserta(self.carreras_filename, "carreras", engine)
+		self.Label3['text'] = L.Leeinserta(self.carreras_filename, "carreras", engine)
 
 	def update_materias_filename(self) -> None:
 		self.materias_filename = ask_filename_csv(self.root)
-		L.Leeinserta(self.materias_filename, "materia_carrera", engine)
+		self.Label4['text'] = L.Leeinserta(self.materias_filename, "materia_carrera", engine)
 
 	def build_ui(self) -> None:
 		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)
