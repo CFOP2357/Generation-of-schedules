@@ -3,8 +3,9 @@ from tkinter import filedialog
 from PIL import ImageTk,Image
 
 def ask_filename_csv(root: Tk):
-	root.filename = filedialog.askopenfilename(title="Selecciona un archivo", 
-											   filetypes=(("csv", "*.csv"), ("", "")))
+	filename = filedialog.askopenfilename(title="Selecciona un archivo", 
+										  filetypes=(("csv", "*.csv"), ("", "")))
+	return filename
 
 class UI(object):
 	"""docstring for UI"""
