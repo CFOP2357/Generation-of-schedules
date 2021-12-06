@@ -23,9 +23,11 @@ engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion
 Lectura.BorrarHorarios()
 
 #Algoritmo iterativo 
-def AlgoritmoIterativoV1():
+def AlgoritmoIterativoV1(o_self):
     #primero obtener todos los alumnos 
     df = Lectura.Consulta_Tabla("alumnos")
+    contador = 0
+
     #La tabla alumnos contiene 2 columnas cve_unica y id_carrera por lo tanto df sera una matriz de 2*n alumnos por lo que 
     #por lo que el for que va mas afuera sera el de los alumnos 
     #Crear una lista de alumnos
@@ -35,7 +37,9 @@ def AlgoritmoIterativoV1():
     for cveunica,idcarrera in df:
         #con este for ya estariamos iterando en todos los alumnos, lo siquiente que hay que hacer es obtner cuales son las materias que se 
         #tienen que inscribir a este alumno segun su carrera
-
+        o_self.progreso.set(contador)
+        contador += 1
+        o_self.master.update_idletasks()#esta funcion nos permite lograr percibir el avance de la barra
         #Instanciar un nuevo alumno 
         Alumno = cl.Horario(cveunica)
         
@@ -77,14 +81,14 @@ def AlgoritmoIterativoV1():
     PilaAlumnos.append(Alumno) #Se asigna el alumno a la pila 
 
 
-def AlgoritmoIterativoV2():
+def AlgoritmoIterativoV2(o_self):
     #primero obtener todos los alumnos 
     df = Lectura.Consulta_Tabla("alumnos")
+    contador = 0
     #La tabla alumnos contiene 2 columnas cve_unica y id_carrera por lo tanto df sera una matriz de 2*n alumnos por lo que 
     #por lo que el for que va mas afuera sera el de los alumnos 
     #Crear una lista de alumnos
-    Al = cl.Horario(2000) #Alumno fake para inicializar la pila 
-    PilaAlumnos = [Al]
+
     
     for cveunica,idcarrera in df:
         #con este for ya estariamos iterando en todos los alumnos, lo siquiente que hay que hacer es obtner cuales son las materias que se 
@@ -92,7 +96,9 @@ def AlgoritmoIterativoV2():
 
         #Instanciar un nuevo alumno 
         Alumno = cl.Horario(cveunica)
-        
+        o_self.progreso.set(contador)
+        contador += 1
+        o_self.root.update_idletasks()#esta funcion nos permite lograr percibir el avance de la barra
         materias = Lectura.MateriasdeCarreraSegunAlumno(cveunica)
         #Segundo iterador for para navegar entre las materias que necesita inscribir el alumno 
         for idmat, idcar, nom in materias: #for iterador de materias
@@ -128,7 +134,6 @@ def AlgoritmoIterativoV2():
                     Lectura.DecrementaCupo(item[0],item[1])
                     break
                 
-    PilaAlumnos.append(Alumno) #Se asigna el alumno a la pila 
 
 
 #AlgoritmoIterativoV2()

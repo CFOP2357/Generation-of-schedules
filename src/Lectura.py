@@ -44,7 +44,7 @@ def Crea_csv_horario(): #este metodo tiene que recibir el objeto que tenga los d
 
 def Leeinserta(path,tablename,engine):
     df = lee_csv(path)
-    mensaje = 'Error'
+    mensaje = 'Error desconocido, favor de informar a un programador'
     shape = df.shape
     if (tablename == 'alumnos'):
         if(shape[1]==2 and df.columns.values[0] == 'cve_unica' and df.columns.values[1] == 'id_carrera' ):
@@ -57,7 +57,7 @@ def Leeinserta(path,tablename,engine):
             mensaje = 'El archivo de los grupos fue cargado correctamente'
             inserta_BD(df,tablename,engine)
         else:
-            mensaje= 'El archivo debe tener dos columnas con encabecados: id_materia, grupo, maestro, cupo'
+            mensaje= 'El archivo debe tener 16 columnas con encabecados: id_materia, grupo, maestro, cupo y los campos de los dias'
             
     elif(tablename == 'carreras'):
         if(shape[1]==2 and df.columns.values[0] == 'id_carrera' and df.columns.values[1] == 'nombre' ):
@@ -71,13 +71,22 @@ def Leeinserta(path,tablename,engine):
             mensaje = 'El archivo de las materias fue cargado correctamente'
             inserta_BD(df,tablename,engine)
         else:
-            mensaje= 'El archivo  debe tener dos columnas con encabecados: id_materia, id_carrera, nombre'
+            mensaje= 'El archivo  debe tener tres columnas con encabecados: id_materia, id_carrera, nombre'
 
     #inserta_BD(df,tablename,engine)
     return mensaje
 
 #Consultas para menejo de datos SQL
 #  
+def Numero_Alumnos():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT count(*) FROM alumnos") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
 def Consulta_Tabla(tablename):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
@@ -173,3 +182,9 @@ def BorrarHorarios():
 
 #for i in range(0,10,2):
 #    print(i)
+
+#numero = Numero_Alumnos()
+#for num in numero:
+#	numero = num[0]
+        	
+#print (numero)

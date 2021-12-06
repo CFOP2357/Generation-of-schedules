@@ -1,7 +1,10 @@
-from tkinter import *
+from tkinter import * 
+from tkinter.ttk import Progressbar
 from tkinter import filedialog
 from PIL import ImageTk,Image
+import threading
 import Lectura as L 
+import AlgorithmV1 as A
 
 def ask_filename_csv(root: Tk):
 	filename = filedialog.askopenfilename(title="Selecciona un archivo", 
@@ -14,6 +17,15 @@ class UI(object):
 		
 		self.root = Tk()
 		self.root.title("Generación de Horarios")
+        
+		self.progreso = DoubleVar()#variable que monitoreara la barra de progreso
+		numero = L.Numero_Alumnos()
+		for num in numero:
+			numero = num[0]
+		self.pbr_tarea = Progressbar(self.root, length=250, style='black.Horizontal.TProgressbar', variable=self.progreso, maximum=100)#aqui se agrega la variable que le da el aumento a la barra en la seccion de variable
+		self.pbr_tarea['value'] = 0 #valor de inicio de barrra de progreso tambien se agrega el limite a la barra con maximum=#
+		
+
 		self.root.resizable(False,False)
 		self.root.iconbitmap(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/icono.ico')
 		self.root.config(bg="#E9E9F1")
@@ -24,6 +36,7 @@ class UI(object):
 		self.Label2 = Label(self.root, text="No cargado", bg="#E9E9F1")
 		self.Label3 = Label(self.root, text="No cargado" , bg="#E9E9F1")
 		self.Label4 = Label(self.root, text="No cargado", bg="#E9E9F1")
+		self.Label5 = Label(self.root, text="No terminado", bg="#E9E9F1")
 		self.label_general = Label(self.root, text="Favor de asignar todos los archivos para generar los horarios.",bg="#E9E9F1")
 		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
 		self.open_estudiantes_button = Button(self.root, text="Abrir CSV de Estudiantes", 
@@ -36,14 +49,15 @@ class UI(object):
 										   command=self.update_materias_filename,bg="#E9E9F1")
 
 		self.generate_schedules_button = Button(self.root, text="Generar Horarios", 
-												command=generate_function,bg="#E9E9F1")
+												command=self.run_algorithm,bg="#E9E9F1")
 		self.build_ui()
     
 	global engine 
 	engine  = L.conexion_BD() #guarda la conexion en un objeto de conexion
 
 	def run(self) -> None:
-		self.root.mainloop()
+		t = threading.Thread(target=self.root.mainloop())
+		t.start()
 
 	def update_estudiantes_filename(self) -> None:
 		self.estudiantes_filename = ask_filename_csv(self.root)
@@ -52,6 +66,23 @@ class UI(object):
 	def update_grupos_filename(self) -> None:
 		self.grupos_filename = ask_filename_csv(self.root)
 		self.Label2['text'] = L.Leeinserta(self.grupos_filename, "materias", engine)
+    
+	
+	def run_algorithm(self) -> None: 
+		t = threading.Thread(target=A.AlgoritmoIterativoV2(self))
+		t.start()
+		self.schedule_check(t)
+		
+	def schedule_check(self, t):
+		self.root.after(1000, self.check_if_done, t)
+	
+	def check_if_done(self,t):
+		# Si el hilo ha finalizado, restaruar el botón y mostrar un mensaje.
+		if not t.is_alive():
+			self.Label5['text'] = "Los horarios estan listos!!"
+		else:
+			# Si no, volver a chequear en unos momentos.
+			self.schedule_check(t)
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
@@ -66,9 +97,15 @@ class UI(object):
 		self.label_general.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=1, column=0, sticky=W)
 		#self.label_Metrica.grid(			padx=5,pady=4,ipadx=5,ipady=5, row=2, column=0, sticky=W)
 		self.open_estudiantes_button.grid(	padx=5,pady=4,ipadx=5,ipady=5, row=3, column=0, sticky=E+W)
+		self.Label1.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=3, column=1, sticky=E+W)
 		self.open_grupos_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=4, column=0, sticky=E+W)
+		self.Label2.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=4, column=1, sticky=E+W)
 		self.open_carreras_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=5, column=0, sticky=E+W)
+		self.Label3.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=5, column=1, sticky=E+W)
 		self.open_materias_button.grid(		padx=5,pady=4,ipadx=5,ipady=5, row=6, column=0, sticky=E+W)
+		self.Label4.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=6, column=1, sticky=E+W)
+		self.pbr_tarea.grid(                padx=5,pady=4,ipadx=5,ipady=5, row=7, column=0, sticky=E+W)#posicionamiento de barra
+		self.Label5.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=7, column=1, sticky=E+W)
 		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=7, column=2, sticky=E+W)
 
 		
