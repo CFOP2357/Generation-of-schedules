@@ -13,7 +13,7 @@ def ask_filename_csv(root: Tk):
 
 class UI(object):
 	"""docstring for UI"""
-	def __init__(self, generate_function) -> None:
+	def __init__(self) -> None:
 		
 		self.root = Tk()
 		self.root.title("Generación de Horarios")
@@ -24,7 +24,7 @@ class UI(object):
 			numero = num[0]
 		self.pbr_tarea = Progressbar(self.root, length=250, style='black.Horizontal.TProgressbar', variable=self.progreso, maximum=100)#aqui se agrega la variable que le da el aumento a la barra en la seccion de variable
 		self.pbr_tarea['value'] = 0 #valor de inicio de barrra de progreso tambien se agrega el limite a la barra con maximum=#
-		
+		self.state = 0
 
 		self.root.resizable(False,False)
 		self.root.iconbitmap(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/icono.ico')
@@ -50,47 +50,66 @@ class UI(object):
 
 		self.generate_schedules_button = Button(self.root, text="Generar Horarios", 
 												command=self.run_algorithm,bg="#E9E9F1")
+		self.generate_schedules_button["state"] = "disabled"
+		self.download_schedule_button = Button(self.root, text="Descargar Horarios", 
+												command=self.select_folder,bg="#E9E9F1")
 		self.build_ui()
     
 	global engine 
 	engine  = L.conexion_BD() #guarda la conexion en un objeto de conexion
+	
+	def select_folder(root: Tk):
+		path = filedialog.askdirectory()
+		print (path)
+		L.Crea_csv_horario(path)
 
 	def run(self) -> None:
 		t = threading.Thread(target=self.root.mainloop())
 		t.start()
+	
+	def button_gen_set(self) -> None:
+		self.generate_schedules_button["state"] = "normal"
 
 	def update_estudiantes_filename(self) -> None:
 		self.estudiantes_filename = ask_filename_csv(self.root)
 		self.Label1['text'] = L.Leeinserta(self.estudiantes_filename, "alumnos", engine)
+		if(self.Label1['text'] == "El archivo de los estudiantes fue cargado correctamente"):
+			self.open_estudiantes_button["state"] = "disabled"
+			self.state +=1
+			if(self.state == 4):
+				self.button_gen_set()
 		
 	def update_grupos_filename(self) -> None:
 		self.grupos_filename = ask_filename_csv(self.root)
 		self.Label2['text'] = L.Leeinserta(self.grupos_filename, "materias", engine)
-    
-	
+		if(self.Label2['text'] == "El archivo de los grupos fue cargado correctamente"):
+			self.open_grupos_button["state"] = "disabled"
+			self.state +=1
+			if(self.state == 4):
+				self.button_gen_set()
+	    
 	def run_algorithm(self) -> None: 
-		t = threading.Thread(target=A.AlgoritmoIterativoV2(self))
-		t.start()
-		self.schedule_check(t)
+		threading.Thread(A.AlgoritmoIterativoV2(self)).start()
+		self.Label5['text'] = "Los horarios estan listos!!"
 		
-	def schedule_check(self, t):
-		self.root.after(1000, self.check_if_done, t)
-	
-	def check_if_done(self,t):
-		# Si el hilo ha finalizado, restaruar el botón y mostrar un mensaje.
-		if not t.is_alive():
-			self.Label5['text'] = "Los horarios estan listos!!"
-		else:
-			# Si no, volver a chequear en unos momentos.
-			self.schedule_check(t)
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
 		self.Label3['text'] = L.Leeinserta(self.carreras_filename, "carreras", engine)
+		if(self.Label3['text'] == "El archivo de las carreras fue cargado correctamente"):
+			self.open_carreras_button["state"] = "disabled"
+			self.state +=1
+			if(self.state == 4):
+				self.button_gen_set()
 
 	def update_materias_filename(self) -> None:
 		self.materias_filename = ask_filename_csv(self.root)
 		self.Label4['text'] = L.Leeinserta(self.materias_filename, "materia_carrera", engine)
+		if(self.Label4['text'] == "El archivo de las materias fue cargado correctamente"):
+			self.open_materias_button["state"] = "disabled"
+			self.state +=1
+			if(self.state == 4):
+				self.button_gen_set()
 
 	def build_ui(self) -> None:
 		self.headerLabel.grid(				padx=5,pady=4,ipadx=5,ipady=5, row=0, column=0, columnspan=3, sticky=S+N+E+W)
@@ -107,5 +126,6 @@ class UI(object):
 		self.pbr_tarea.grid(                padx=5,pady=4,ipadx=5,ipady=5, row=7, column=0, sticky=E+W)#posicionamiento de barra
 		self.Label5.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=7, column=1, sticky=E+W)
 		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=7, column=2, sticky=E+W)
+		self.download_schedule_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=8, column=2, sticky=E+W)
 
 		
