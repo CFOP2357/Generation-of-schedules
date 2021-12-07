@@ -1,11 +1,10 @@
 import os
-import Lectura
+import AlgorithmV1 as A
+import threading 
 
 from user_interface import UI
-#########un cambio
-def generate_schedule():
-	Lectura.Crea_csv_horario()
 
+
+interface = UI()
 if __name__ == "__main__":
-	interface = UI(generate_function = generate_schedule)
-	interface.run()
+	target=interface.run()
