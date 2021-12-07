@@ -18,36 +18,65 @@ def BD_connector():
     return mysql.connector.connect(host="localhost", user="root", password="1234",database="horarios")
 
 
-
 def Imprime_datos(datos):
     for fila in datos: #itera en cada fila de los datos leidos en la BD y los va imprimiendo
         print(fila)
 
 
-def Crea_csv_horario(): #este metodo tiene que recibir el objeto que tenga los datos 
-    archivo = "horariosUaslp.csv"
+def Crea_csv_horario(path): #este metodo tiene que recibir el objeto que tenga los datos 
+    archivo = path + "/horariosUaslp.csv"
     csv = open(archivo,"w")
     csv.write("cve_alumno,cve_materia,grupo\n")
-
-    #creando un data framework con datos fake
-    claves_alumnos = pd.Series(['275648','275648','275648','271864','271864','271864','264821','264821','264821'])
-    cve_materias = pd.Series(['5486','8799','5487','6548','2658','4568','5646','6458','6521'])
-    gpo = pd.Series(['01','02','01','01','01','01','02','04','02'])
-    
-    horarios = {'cve_alumno':claves_alumnos,'cve_materias':cve_materias,'grupo':gpo}
-    df = pd.DataFrame(data=horarios)
-   
     #el dataframe seria df, ese seria el objeto que llega "datos"
-    for indice, fila in df.iterrows():
-       hor= fila['cve_alumno'] + "," + fila['cve_materias'] + "," + fila['grupo'] + "\n"
+    for cveal, cvemat, grupo in ObtieneHorario():
+       hor= str(cveal) + "," + str(cvemat)  + "," + str(grupo) + "\n"
+       print(hor)
        csv.write(hor)
 
 def Leeinserta(path,tablename,engine):
     df = lee_csv(path)
-    inserta_BD(df,tablename,engine)
+    mensaje = 'Error desconocido, favor de informar a un programador'
+    shape = df.shape
+    if (tablename == 'alumnos'):
+        if(shape[1]==2 and df.columns.values[0] == 'cve_unica' and df.columns.values[1] == 'id_carrera' ):
+            mensaje = 'El archivo de los estudiantes fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener dos columnas con encabecados: cve_unica, id_carrera'
+    elif(tablename == 'materias'):
+        if(shape[1]==16 and df.columns.values[0] == 'id_materia' and df.columns.values[1] == 'grupo' and df.columns.values[2] == 'maestro' and df.columns.values[3] == 'cupo' ):
+            mensaje = 'El archivo de los grupos fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo debe tener 16 columnas con encabecados: id_materia, grupo, maestro, cupo y los campos de los dias'
+            
+    elif(tablename == 'carreras'):
+        if(shape[1]==2 and df.columns.values[0] == 'id_carrera' and df.columns.values[1] == 'nombre' ):
+            mensaje = 'El archivo de las carreras fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener dos columnas con encabecados: id_carrera, nombre'
+
+    elif(tablename == 'materia_carrera'):
+        if(shape[1]==3 and df.columns.values[0] == 'id_materia' and df.columns.values[1] == 'id_carrera' and df.columns.values[2] == 'nombre' ):
+            mensaje = 'El archivo de las materias fue cargado correctamente'
+            inserta_BD(df,tablename,engine)
+        else:
+            mensaje= 'El archivo  debe tener tres columnas con encabecados: id_materia, id_carrera, nombre'
+
+    return mensaje
 
 #Consultas para menejo de datos SQL
 #  
+def Numero_Alumnos():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT count(*) FROM alumnos") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
 def Consulta_Tabla(tablename):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
@@ -85,6 +114,15 @@ def ObtieneGruposEquitativo(idmateria):
     cnn.close() #cerrar conexion 
     return datos #regresar los datos consultados
 
+def ObtieneHorario():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT * FROM horarios.horarios") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
 
 def DecrementaCupo(idmateria,grupo):
     cnn = BD_connector() #crear conexion con la BD
@@ -111,6 +149,14 @@ def BorrarHorarios():
     cur.close() #cerrar cursor
 
 ##-------Pruebas en comentarios Ignorar---------
+#count = 0
+#for a,b,c in ObtieneHorario():
+#    print(str(a),str(b),str(c))
+#    count += 1
+#    if(count == 100):
+#        break
+    
+
 
 #DecrementaCupo(0,1)
 #Alumno = cl.Horario(275507)
@@ -143,3 +189,9 @@ def BorrarHorarios():
 
 #for i in range(0,10,2):
 #    print(i)
+
+#numero = Numero_Alumnos()
+#for num in numero:
+#	numero = num[0]
+        	
+#print (numero)
