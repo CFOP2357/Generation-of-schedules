@@ -67,11 +67,41 @@ def Leeinserta(path,tablename,engine):
     return mensaje
 
 #Consultas para menejo de datos SQL
-#  
+#  -----------------------------------------------------------------
+#Regresa cuantas materias tiene que llevar el alumno x 
+def Materias_de_Alumno(cveunica):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("SELECT count(m.id_materia) FROM horarios.materia_carrera as m WHERE m.id_carrera = ( select a.id_carrera from horarios.alumnos as a where a.cve_unica = "+str(cveunica)+ " )") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+#Regresa cuantas materias tiene inscritas un alumno 
+def Materias_inscritas(cveunica):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("select count(h.cve_unica) from horarios.horarios as h where h.cve_unica = "+str(cveunica)+"") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+
 def Numero_Alumnos():
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
     cur.execute("SELECT count(*) FROM alumnos") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+def Lista_materias():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("select distinct id_materia from horarios.materia_carrera order by id_materia") # consulta en  SQL
     datos = cur.fetchall() # obtener en un objeto los datos de la tabla
     cur.close() #cerrar cursor
     cnn.close() #cerrar conexion 
@@ -90,6 +120,15 @@ def MateriasdeCarreraSegunAlumno(cveunica):
     cnn = BD_connector() #crear conexion con la BD
     cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
     cur.execute( "SELECT m.id_materia, m.id_carrera, m.Nombre FROM materia_carrera as m WHERE m.id_carrera = ( select a.id_carrera from alumnos as a where a.cve_unica =" + str(cveunica) + ")" ) # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
+def Obtiene_Grupo(idmateria,grupo):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("select * from horarios.materias where id_materia ="+str(idmateria)+" and grupo = "+str(grupo)) # consulta en  SQL
     datos = cur.fetchall() # obtener en un objeto los datos de la tabla
     cur.close() #cerrar cursor
     cnn.close() #cerrar conexion 
@@ -132,6 +171,24 @@ def DecrementaCupo(idmateria,grupo):
     cur.execute(consql) # consulta en  SQL
     cnn.commit() #cerrar conexion 
     cur.close() #cerrar cursor
+
+def AumentaCupo(idmateria,grupo):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    consql = "UPDATE horarios.materias as m SET m.cupo = m.cupo + 1 where m.id_materia = "+ str(idmateria) +" and m.grupo = "+ str(grupo)
+    #print(consql)
+    cur.execute(consql) # consulta en  SQL
+    cnn.commit() #cerrar conexion 
+    cur.close() #cerrar cursor
+
+def Elimina_materia(cveunica,idmateria):
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    consql = "delete from horarios.horarios where cve_unica = "+str(cveunica)+" and id_materia = " + str(idmateria)
+    #print(consql)
+    cur.execute(consql) # consulta en  SQL
+    cnn.commit() #cerrar conexion 
+    cur.close() #cerrar cursor
     
 
 def InsertaMateria(cveunica, idmateria, grupo):
@@ -149,6 +206,7 @@ def BorrarHorarios():
     cur.close() #cerrar cursor
 
 ##-------Pruebas en comentarios Ignorar---------
+
 #count = 0
 #for a,b,c in ObtieneHorario():
 #    print(str(a),str(b),str(c))

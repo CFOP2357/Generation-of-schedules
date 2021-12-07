@@ -18,16 +18,50 @@ class Horario:
             elif(HoraFinal==HoraInicio+3):
                 self.matrizHor[HoraFinal - (7 + 1),Dia] = 1
                 self.matrizHor[HoraFinal - (7 + 2),Dia] = 1
+    
+    def QuitHora(self, HoraInicio, HoraFinal, Dia):
+        self.matrizHor[HoraInicio-7,Dia] = 0
+        if(HoraFinal>HoraInicio+1):
+            if(HoraFinal==HoraInicio+2):
+                self.matrizHor[HoraFinal - (7 + 1),Dia] = 0
+            elif(HoraFinal==HoraInicio+3):
+                self.matrizHor[HoraFinal - (7 + 1),Dia] = 0
+                self.matrizHor[HoraFinal - (7 + 2),Dia] = 0
 
 #Con base en los parametros que llegan checa en la matriz si tiene un 1 , si es asi
 #esta ocupado.
-    def VerificaOcupado(self, HoraInicio,HoraFinal,Dia):
+    def VerificaOcupadoxDia(self, HoraInicio,HoraFinal,Dia):
         bandera = 1
         if(self.matrizHor[HoraInicio-7,Dia] == 1):
           bandera = 0
         elif(self.matrizHor[HoraFinal-8,Dia] == 1):
           bandera = 0
         return bandera
+    
+    def VerificaOcupado(self,item):
+        dia=0
+        bandera = 1
+        for i in range(0,10,2):
+            if(item[i+4] != 0):
+                if(self.VerificaOcupadoxDia(item[i+4],item[i+5],dia) == 0):
+                    bandera=0
+                    break
+            dia = dia + 1
+        return bandera
+    
+    def Inscribe_materia_matriz(self, item):
+        dia=0
+        for i in range(0,10,2):
+            if(item[i+4] != 0):
+                self.SetHora(item[i+4],item[i+5],dia)
+            dia = dia + 1
+
+    def Desinscribe_materia_matriz(self, item):
+        dia=0
+        for i in range(0,10,2):
+            if(item[i+4] != 0):
+                self.QuitHora(item[i+4],item[i+5],dia)
+            dia = dia + 1
 
 
 #imprime matriz
