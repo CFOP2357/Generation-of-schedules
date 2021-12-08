@@ -20,9 +20,6 @@ engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion
 #Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materia_carrera.csv","materia_carrera",engine)
 #Lectura.Leeinserta("C:/Users/angel/Documents/python/archivos_csv/materias.csv","materias",engine)
 
-Lectura.BorrarHorarios()
-
-PilaAlumnos = []
 
 def EncuentraAlumnoPila(cveunica):
     for item in PilaAlumnos:
@@ -64,6 +61,9 @@ def posible_inscribir(cveunica, idmateria, grupo):
 
 #Algoritmo iterativo 
 def AlgoritmoIterativoV2(o_self):
+    Lectura.BorrarHorarios()
+    PilaAlumnos = []
+
     #primero obtener todos los alumnos 
     df = Lectura.Consulta_Tabla("alumnos")
     contador = 0

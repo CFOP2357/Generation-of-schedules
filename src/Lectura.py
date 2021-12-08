@@ -88,6 +88,9 @@ def Materias_inscritas(cveunica):
     cnn.close() #cerrar conexion 
     return datos #regresar los datos consultados
 
+def alumno_completo(cveunica):
+    return Materias_inscritas(cveunica) == Materias_de_Alumno(cveunica)
+
 
 def Numero_Alumnos():
     cnn = BD_connector() #crear conexion con la BD
