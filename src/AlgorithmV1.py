@@ -3,7 +3,7 @@ import ClaseHorario as cl
 
 #instalar las librerias de pandas y de sqlalchemy "pi pandas y pi sqlalchemy"
 
-engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion 
+#engine = Lectura.conexion_BD() #guarda la conexion en un objeto de conexion 
 
 
 #Leer todos los archivos
