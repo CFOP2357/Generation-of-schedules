@@ -82,7 +82,7 @@ def AlgoritmoIterativoV2(o_self):
         
         Alumno = cl.Horario(cveunica)
 
-        progreso = 100*contador/total
+        progreso = 95*contador/total
         o_self.progreso.set(progreso)
         contador += 1
 

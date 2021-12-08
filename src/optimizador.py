@@ -24,7 +24,7 @@ def alumno_completo(cveunica):
 	return materias_inscritas[cveunica] == materias_de_alumno[cveunica]
 
 def get_claves_alumnos():
-"""retorna una lista de las claves unicas de los alumnos"""
+	"""retorna una lista de las claves unicas de los alumnos"""
 	return range(1, 1141) #talvez se necesita una funcion que retorna las claves de los alumnos
 
 def get_metricas():
@@ -37,30 +37,30 @@ def get_metricas():
 	return horarios_completos
 
 def genera_siguiente_solucion(T):
-"""se dan de baja todas las materias de T alumnos seleccionados de forma aleatoria
-despues en un orden aleatorio se empiezan a llenar los alumnos
-"""
-	claves_alumnos = random.sample(get_claves_alumnos())
+	"""se dan de baja todas las materias de T alumnos seleccionados de forma aleatoria
+	despues en un orden aleatorio se empiezan a llenar los alumnos
+	"""
+	claves_alumnos = random.sample(get_claves_alumnos(), 5)
 	random.shuffle(claves_alumnos)
 
 	for cveunica in claves_alumnos:
-		materias = tabla_materias_inscritas(cveunica)
-		for id_materia, grupo in materias
+		materias = Lectura.tabla_materias_inscritas(cveunica)
+		for id_materia, grupo in materias:
+			AlgorithmV1.desinscribe_materia(cveunica, id_materia, grupo)
 			bajas_en_movimiento.append((cveunica, id_materia, grupo))
 
-		delete_materias_inscritas(cveunica)
+		materias_inscritas[cveunica] = 0
 
 	for cveunica in claves_alumnos:
 		materias = Lectura.MateriasdeCarreraSegunAlumno(cveunica)
 		for idmat, idcar, nom in materias:
 			grupos = Lectura.ObtieneGruposEquitativo(idmat) 
 			for item in grupos:
-			    if(AlgorithmV1.posible_inscribir(cveunica, idmat, item)):
-			        AlgorithmV1.inscribe_materia(cveunica, idmateria, grupo)
-			        
-			        inscripciones_en_movimiento.append((cveunica, idmateria, grupo))
+				if(AlgorithmV1.posible_inscribir(cveunica, idmat, item)):
+					AlgorithmV1.inscribe_materia(cveunica, idmateria, grupo)
+					inscripciones_en_movimiento.append((cveunica, idmateria, grupo))
 					materias_inscritas[cveunica] += 1
-			        break
+					break
 
 def mover_solucion():
 	inscripciones_en_movimiento = []
@@ -78,17 +78,24 @@ def mantener_solucion_actual():
 	inscripciones_en_movimiento = []
 	bajas_en_movimiento = []
 
-def enfriamiento_simulado(T_inicial = 1000, alpha = 0.80, L = 10, T_final = 1):
-	print("empieza a optimizar")
+def enfriamiento_simulado(o_self, T_inicial = 1000, alpha = 0.80, L = 10, T_final = 1):
+	print("empieza a optimizar2")
 
 	funcion_objetivo_actual = get_metricas()
 	mejor_funcion_objetivo = funcion_objetivo_actual
+
+	contador = 0;
+	total = 32*L
 
 	T = T_inicial
 	while T >= T_final:
 		print(T, funcion_objetivo_actual)
 
 		for i in range(1, L):
+			contador += 1;
+			progreso = 95*contador/total
+			o_self.progreso.set(progreso)
+
 			genera_siguiente_solucion(T)
 			funcion_objetivo_siguiente = get_metricas()
 

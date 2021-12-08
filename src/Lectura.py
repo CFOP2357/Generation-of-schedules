@@ -254,17 +254,12 @@ def BorrarHorarios():
             
 #print (numero)
 def tabla_materias_inscritas(cveunica):
-    cur = SSCursor(cnn) #crear un objeto cursor para moverse en los datos de la BD
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
     cur.execute("select id_materia, grupo from horarios.horarios where cve_unica = "+str(cveunica)+"") # consulta en  SQL
     datos = cur.fetchall() # obtener en un objeto los datos de la tabla
     cur.close()
     return datos #regresar los datos consultados
 
-def delete_materias_inscritas(cveunica):
-    cur = SSCursor(cnn) #crear un objeto cursor para moverse en los datos de la BD
-    cur.execute("delete from horarios.horarios where cve_unica = "+str(cveunica)+"") # consulta en  SQL
-    cur.close()
-
 def alumno_completo(cveunica):
-    cur = SSCursor(cnn) #crear un objeto cursor para moverse en los datos de la BD
     return Materias_inscritas(cveunica) == Materias_de_Alumno(cveunica)
