@@ -88,6 +88,16 @@ def Materias_inscritas(cveunica):
     cnn.close() #cerrar conexion 
     return datos #regresar los datos consultados
 
+#regresa todas las claves de los alumnos
+def Regresa_cves_alumnos():
+    cnn = BD_connector() #crear conexion con la BD
+    cur = cnn.cursor() #crear un objeto cursor para moverse en los datos de la BD
+    cur.execute("select cve_unica from horarios.alumnos") # consulta en  SQL
+    datos = cur.fetchall() # obtener en un objeto los datos de la tabla
+    cur.close() #cerrar cursor
+    cnn.close() #cerrar conexion 
+    return datos #regresar los datos consultados
+
 
 def Numero_Alumnos():
     cnn = BD_connector() #crear conexion con la BD

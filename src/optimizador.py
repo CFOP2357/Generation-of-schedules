@@ -25,7 +25,7 @@ def alumno_completo(cveunica):
 
 def get_claves_alumnos():
 	"""retorna una lista de las claves unicas de los alumnos"""
-	return range(1, 1141) #talvez se necesita una funcion que retorna las claves de los alumnos
+	return range(1, 100) #talvez se necesita una funcion que retorna las claves de los alumnos ##--- ya esta en Lectura.py ---##
 
 def get_metricas():
 	claves_alumnos = get_claves_alumnos()
