@@ -31,12 +31,13 @@ class UI(object):
 		self.root.config(bg="#E9E9F1")
 		self.headerImg = ImageTk.PhotoImage(Image.open(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/UASLP.PNG'))
 		self.headerLabel = Label(self.root, image=self.headerImg)
-		
+
 		self.Label1 = Label(self.root, text="No cargado", bg="#E9E9F1")
 		self.Label2 = Label(self.root, text="No cargado", bg="#E9E9F1")
 		self.Label3 = Label(self.root, text="No cargado" , bg="#E9E9F1")
 		self.Label4 = Label(self.root, text="No cargado", bg="#E9E9F1")
 		self.Label5 = Label(self.root, text="No terminado", bg="#E9E9F1")
+		self.Label6 = Label(self.root, text="Podrás descargar hasta que terminen los horarios", bg="#E9E9F1")
 		self.label_general = Label(self.root, text="Favor de asignar todos los archivos para generar los horarios.",bg="#E9E9F1")
 
 		self.label_Metrica = Label(self.root, text=" ",bg="#E9E9F1")
@@ -54,6 +55,7 @@ class UI(object):
 		self.generate_schedules_button["state"] = "disabled"
 		self.download_schedule_button = Button(self.root, text="Descargar Horarios", 
 												command=self.select_folder,bg="#E9E9F1")
+		self.download_schedule_button["state"] = "disabled"
 		self.build_ui()
     
 	global engine 
@@ -90,8 +92,10 @@ class UI(object):
 				self.button_gen_set()
 	    
 	def run_algorithm(self) -> None: 
-		threading.Thread(A.AlgoritmoIterativoV2(self)).start()
+		threading.Thread(target = A.AlgoritmoIterativoV2(self)).start()
 		self.Label5['text'] = "Los horarios estan listos!!"
+		self.download_schedule_button["state"] = "normal"
+		self.Label6['text'] = "Elige la carpeta para descargar los horarios"
 		
 
 	def update_carreras_filename(self) -> None:
@@ -128,5 +132,6 @@ class UI(object):
 		self.Label5.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=7, column=1, sticky=E+W)
 		self.generate_schedules_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=7, column=2, sticky=E+W)
 		self.download_schedule_button.grid(padx=5,pady=4,ipadx=5,ipady=5, row=8, column=2, sticky=E+W)
+		self.Label6.grid(                   padx=5,pady=4,ipadx=5,ipady=5, row=8, column=1, sticky=E+W)
 
 		
