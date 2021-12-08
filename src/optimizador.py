@@ -1,9 +1,13 @@
+import random
+import math
+
+import numpy as np
+
 import Lectura
 import ClaseHorario
 import AlgorithmV1
 
-import random
-import math
+
 
 materias_inscritas = dict()
 materias_de_alumno = dict()
@@ -19,8 +23,12 @@ def alumno_completo(cveunica):
 
 	return materias_inscritas[cveunica] == materias_de_alumno[cveunica]
 
+def get_claves_alumnos():
+"""retorna una lista de las claves unicas de los alumnos"""
+	return range(1, 1141) #talvez se necesita una funcion que retorna las claves de los alumnos
+
 def get_metricas():
-	claves_alumnos = range(1, 1141) #talvez se necesita una funcion que retorna las claves de los alumnos
+	claves_alumnos = get_claves_alumnos()
 
 	horarios_completos = 0
 	for cveunica in claves_alumnos:
@@ -29,8 +37,30 @@ def get_metricas():
 	return horarios_completos
 
 def genera_siguiente_solucion(T):
-"""se dan de baja todas las materias de T alumnos seleccionados de forma aleatoria"""
-	pass
+"""se dan de baja todas las materias de T alumnos seleccionados de forma aleatoria
+despues en un orden aleatorio se empiezan a llenar los alumnos
+"""
+	claves_alumnos = random.sample(get_claves_alumnos())
+	random.shuffle(claves_alumnos)
+
+	for cveunica in claves_alumnos:
+		materias = tabla_materias_inscritas(cveunica)
+		for id_materia, grupo in materias
+			bajas_en_movimiento.append((cveunica, id_materia, grupo))
+
+		delete_materias_inscritas(cveunica)
+
+	for cveunica in claves_alumnos:
+		materias = Lectura.MateriasdeCarreraSegunAlumno(cveunica)
+		for idmat, idcar, nom in materias:
+			grupos = Lectura.ObtieneGruposEquitativo(idmat) 
+			for item in grupos:
+			    if(AlgorithmV1.posible_inscribir(cveunica, idmat, item)):
+			        AlgorithmV1.inscribe_materia(cveunica, idmateria, grupo)
+			        
+			        inscripciones_en_movimiento.append((cveunica, idmateria, grupo))
+					materias_inscritas[cveunica] += 1
+			        break
 
 def mover_solucion():
 	inscripciones_en_movimiento = []
@@ -39,20 +69,24 @@ def mover_solucion():
 def mantener_solucion_actual():
 	for cveunica, idmateria, grupo in inscripciones_en_movimiento:
 		AlgorithmV1.desinscribe_materia(cveunica, idmateria, grupo)
+		materias_inscritas[cveunica] -= 1
 
 	for cveunica, idmateria, grupo in bajas_en_movimiento:
 		AlgorithmV1.inscribe_materia(cveunica, idmateria, grupo)
+		materias_inscritas[cveunica] += 1
 
 	inscripciones_en_movimiento = []
 	bajas_en_movimiento = []
 
-def enfriamiento_simulado(T_inicial = 1000, alpha = 0.95, L = 10, T_final = 1):
+def enfriamiento_simulado(T_inicial = 1000, alpha = 0.80, L = 10, T_final = 1):
+	print("empieza a optimizar")
+
 	funcion_objetivo_actual = get_metricas()
 	mejor_funcion_objetivo = funcion_objetivo_actual
 
 	T = T_inicial
 	while T >= T_final:
-		print(T)
+		print(T, funcion_objetivo_actual)
 
 		for i in range(1, L):
 			genera_siguiente_solucion(T)
@@ -71,10 +105,8 @@ def enfriamiento_simulado(T_inicial = 1000, alpha = 0.95, L = 10, T_final = 1):
 
 		T *= alpha
 
+	print(mejor_funcion_objetivo)
+
 	return mejor_funcion_objetivo
 
 #print(get_metricas())
-print(enfriamiento_simulado())
-#print(get_metricas())
-
-Lectura.close()
