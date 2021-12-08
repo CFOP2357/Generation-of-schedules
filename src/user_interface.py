@@ -27,9 +27,9 @@ class UI(object):
 		self.state = 0
 
 		self.root.resizable(False,False)
-		self.root.iconbitmap(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/icono.ico')
+		self.root.iconbitmap('icono.ico')
 		self.root.config(bg="#E9E9F1")
-		self.headerImg = ImageTk.PhotoImage(Image.open(r'G:/Mi unidad/GenerationofSchedules/Generation-of-schedules/src/UASLP.PNG'))
+		self.headerImg = ImageTk.PhotoImage(Image.open('UASLP.PNG'))
 		self.headerLabel = Label(self.root, image=self.headerImg)
 
 		self.Label1 = Label(self.root, text="No cargado", bg="#E9E9F1")
