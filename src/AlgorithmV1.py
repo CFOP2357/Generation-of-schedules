@@ -66,6 +66,8 @@ def posible_inscribir(cveunica, idmateria, grupo):
 def AlgoritmoIterativoV2(o_self):
     #primero obtener todos los alumnos 
     df = Lectura.Consulta_Tabla("alumnos")
+
+    total = len(df)
     contador = 0
     #La tabla alumnos contiene 2 columnas cve_unica y id_carrera por lo tanto df sera una matriz de 2*n alumnos por lo que 
     #por lo que el for que va mas afuera sera el de los alumnos 
@@ -79,8 +81,11 @@ def AlgoritmoIterativoV2(o_self):
         #Instanciar un nuevo alumno 
         
         Alumno = cl.Horario(cveunica)
-        o_self.progreso.set(contador)
+
+        progreso = 100*contador/total
+        o_self.progreso.set(progreso)
         contador += 1
+
         o_self.root.update_idletasks()#esta funcion nos permite lograr percibir el avance de la barra
         materias = Lectura.MateriasdeCarreraSegunAlumno(cveunica)
         #Segundo iterador for para navegar entre las materias que necesita inscribir el alumno 

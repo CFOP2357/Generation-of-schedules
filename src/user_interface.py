@@ -6,6 +6,8 @@ import threading
 import Lectura as L 
 import AlgorithmV1 as A
 
+import time
+
 def ask_filename_csv(root: Tk):
 	filename = filedialog.askopenfilename(title="Selecciona un archivo", 
 										  filetypes=(("csv", "*.csv"), ("", "")))
@@ -51,7 +53,7 @@ class UI(object):
 										   command=self.update_materias_filename,bg="#E9E9F1")
 
 		self.generate_schedules_button = Button(self.root, text="Generar Horarios", 
-												command=self.run_algorithm,bg="#E9E9F1")
+												command=self.run_thread,bg="#E9E9F1")
 		self.generate_schedules_button["state"] = "disabled"
 		self.download_schedule_button = Button(self.root, text="Descargar Horarios", 
 												command=self.select_folder,bg="#E9E9F1")
@@ -66,9 +68,9 @@ class UI(object):
 		print (path)
 		L.Crea_csv_horario(path)
 
+
 	def run(self) -> None:
-		t = threading.Thread(target=self.root.mainloop())
-		t.start()
+		self.root.mainloop()
 	
 	def button_gen_set(self) -> None:
 		self.generate_schedules_button["state"] = "normal"
@@ -92,11 +94,14 @@ class UI(object):
 				self.button_gen_set()
 	    
 	def run_algorithm(self) -> None: 
-		threading.Thread(target = A.AlgoritmoIterativoV2(self)).start()
+		A.AlgoritmoIterativoV2(self)
 		self.Label5['text'] = "Los horarios estan listos!!"
 		self.download_schedule_button["state"] = "normal"
 		self.Label6['text'] = "Elige la carpeta para descargar los horarios"
-		
+
+	def run_thread(self):
+		t1 = threading.Thread(target=self.run_algorithm)
+		t1.start()		
 
 	def update_carreras_filename(self) -> None:
 		self.carreras_filename = ask_filename_csv(self.root)
