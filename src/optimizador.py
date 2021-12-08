@@ -8,7 +8,7 @@ import math
 materias_inscritas = dict()
 materias_de_alumno = dict()
 
-inscripciones_en_movimiento = []
+inscripciones_en_movimiento = [] #cveunica, idmateria, grupo
 bajas_en_movimiento = []
 
 def alumno_completo(cveunica):
@@ -29,13 +29,22 @@ def get_metricas():
 	return horarios_completos
 
 def genera_siguiente_solucion(T):
+"""se dan de baja todas las materias de T alumnos seleccionados de forma aleatoria"""
 	pass
 
 def mover_solucion():
-	pass
+	inscripciones_en_movimiento = []
+	bajas_en_movimiento = []
 
 def mantener_solucion_actual():
-	pass
+	for cveunica, idmateria, grupo in inscripciones_en_movimiento:
+		AlgorithmV1.desinscribe_materia(cveunica, idmateria, grupo)
+
+	for cveunica, idmateria, grupo in bajas_en_movimiento:
+		AlgorithmV1.inscribe_materia(cveunica, idmateria, grupo)
+
+	inscripciones_en_movimiento = []
+	bajas_en_movimiento = []
 
 def enfriamiento_simulado(T_inicial = 1000, alpha = 0.95, L = 10, T_final = 1):
 	funcion_objetivo_actual = get_metricas()
@@ -59,6 +68,7 @@ def enfriamiento_simulado(T_inicial = 1000, alpha = 0.95, L = 10, T_final = 1):
 				mantener_solucion_actual()
 
 			mejor_funcion_objetivo = min(mejor_funcion_objetivo, funcion_objetivo_actual)
+
 		T *= alpha
 
 	return mejor_funcion_objetivo
