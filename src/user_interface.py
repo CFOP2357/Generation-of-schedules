@@ -123,10 +123,10 @@ class UI(object):
 		self.Label5['text'] = "mejorando horario"
 		self.Label6['text'] = "Podrás descargar hasta que terminen los horarios"
 		
-		optimizador.enfriamiento_simulado(self)
+		ans = optimizador.enfriamiento_simulado(self)
 
 		self.Label5['text'] = "calculando metricas"
-		self.Label_metricas['text'] = "horarios completos: " + str(optimizador.get_metricas())
+		self.Label_metricas['text'] = "horarios completos: " + str(ans)
 
 		self.Label5['text'] = "horario disponible"
 		self.download_schedule_button["state"] = "normal"
