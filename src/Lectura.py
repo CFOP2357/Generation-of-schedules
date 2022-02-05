@@ -7,6 +7,7 @@ def inserta_BD(df,nt,cn):
 
 
 def conexion_BD():
+    
     db= "horarios" #nombre de la tabla en la BD
     url = "mysql+mysqlconnector://root:1234@localhost/" #ruta de conexion
     return create_engine(url+db,echo = False)
